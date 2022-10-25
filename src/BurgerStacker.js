@@ -2,46 +2,36 @@ import React, { useState } from 'react'
 import IngredientList from './IngredientList'
 import BurgerPane from './BurgerPane'
 
-const BurgerStacker = (props) => {
-    // state = {
-    const [ingredients] = useState([
-            {name: 'Kaiser Bun', color: 'saddlebrown'},
-            {name: 'Sesame Bun', color: 'sandybrown'},
-            {name: 'Gluten Free Bun', color: 'peru'},
-            {name: 'Lettuce Wrap', color: 'olivedrab'},
-            {name: 'Beef Patty', color: '#3F250B'},
-            {name: 'Soy Patty', color: '#3F250B'},
-            {name: 'Black Bean Patty', color: '#3F250B'},
-            {name: 'Chicken Patty', color: 'burlywood'},
-            {name: 'Lettuce', color: 'lawngreen'},
-            {name: 'Tomato', color: 'tomato'},
-            {name: 'Bacon', color: 'maroon'},
-            {name: 'Onion', color: 'lightyellow'},
-            {name: 'Cheese', color: 'gold'}
-        ])
-    const [burgerIngredients, setBurgIngred] = useState(null)
-    // }
+const BurgerStacker = () => {
     
+    const defaultIngredients = [
+        {name: 'Kaiser Bun', color: 'saddlebrown'},
+        {name: 'Sesame Bun', color: 'sandybrown'},
+        {name: 'Gluten Free Bun', color: 'peru'},
+        {name: 'Lettuce Wrap', color: 'olivedrab'},
+        {name: 'Beef Patty', color: '#3F250B'},
+        {name: 'Soy Patty', color: '#3F250B'},
+        {name: 'Black Bean Patty', color: '#3F250B'},
+        {name: 'Chicken Patty', color: 'burlywood'},
+        {name: 'Lettuce', color: 'lawngreen'},
+        {name: 'Tomato', color: 'tomato'},
+        {name: 'Bacon', color: 'maroon'},
+        {name: 'Onion', color: 'lightyellow'},
+        {name: 'Cheese', color: 'gold'}
+    ]
+
+    const [ingredients, setIngredients] = useState(defaultIngredients)
+    const [burgerIngredients, setBurgerIngredients] = useState([])
+
     // this function adds items to the burgerIngredients array, which allows burgerPane to render them
     const addToStack = (e) => {
         const ingName = e.target.innerText
         const ingColor = e.target.style.backgroundColor
+        setBurgerIngredients(
+                [{ name: ingName, color: ingColor },
+                ...burgerIngredients]
+                )
 
-        // console.log('This is the name', ingName)
-        // console.log('This is the color', ingColor)
-
-        burgerIngredients( [
-                { name: ingName, color: ingColor },
-                ...burgerIngredients
-            ])
-
-    }
-
-    // this function will clear the burgerPane, passed as a prop to that component, but lives here so it can setState
-    const clearBurger = () => {
-        setBurgIngred({
-            burgerIngredients: []
-        })
     }
 
     // this function will remove one ingredient from the burger
@@ -58,9 +48,12 @@ const BurgerStacker = (props) => {
         currBurger.splice(clickIndex, 1)
         console.log('this is the current burger after splice', currBurger)
         // then we can set state with the copy.
-        setBurgIngred({
-            burgerIngredients: currBurger
-        })
+        setBurgerIngredients(currBurger)
+    }
+
+    // this function will clear the burgerPane, passed as a prop to that component, but lives here so it can setState
+    const clearBurger = () => {
+        setBurgerIngredients([])
     }
 
     return (
@@ -68,8 +61,8 @@ const BurgerStacker = (props) => {
             <h1>Burger Stacker</h1>
             <div className='panes'>
                 <IngredientList 
-                    ingredients={props.ingredients}
-                    add={props.addToStack}
+                    ingredients={ingredients}
+                    add={addToStack}
                 />
                 <BurgerPane 
                     ingredients={burgerIngredients}
